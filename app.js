@@ -1,6 +1,5 @@
 function mostrarComentarios(postId) {
     let divCommentsUsuario = document.getElementById(`comment${postId}`);
-    const misComentarios = JSON.parse(localStorage.getItem("misComentarios") || []);
 
     fetch(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
         .then(res => res.json())
@@ -14,18 +13,8 @@ function mostrarComentarios(postId) {
                                                     </div>
                                                 </div>`;
             })
-            if (misComentarios.postId == postId){
-                divCommentsUsuario.innerHTML += `<div class="card">
-                                                    <div class="card-header">${misComentarios.email}</div>
-                                                    <div class="card-body">
-                                                        <h6 class="card-title">${misComentarios.name}</h6>
-                                                        <p class="card-text">${misComentarios.body}</p>
-                                                    </div>
-                                                </div>`;
-            }
         })
 }
-
 function ocultarComentarios(postId) {
     let divCommentsUsuario = document.getElementById(`comment${postId}`);
     fetch(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
@@ -65,8 +54,6 @@ function agregarComentario(postId) {
         let email = document.getElementById("input-email").value;
         let body = document.getElementById("input-body").value;
 
-        let misComentarios = 
-
         fetch(`https://jsonplaceholder.typicode.com/comments`, {
             method: 'POST',
             body: JSON.stringify({
@@ -82,7 +69,13 @@ function agregarComentario(postId) {
         .then(res => res.json())
         .then(data => {
             console.log(data);
-            localStorage.setItem("misComentarios", JSON.stringify(data) || []);
+            divCommentsUsuario.innerHTML += `<div class="card">
+                                                <div class="card-header">${data.email}</div>
+                                                <div class="card-body">
+                                                <h6 class="card-title">${data.name}</h6>
+                                                <p class="card-text">${data.body}</p>
+                                                </div>
+                                            </div>`;
         })
         divCommentFormulario.innerHTML = "";
     })
